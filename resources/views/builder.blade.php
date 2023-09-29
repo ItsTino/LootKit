@@ -141,7 +141,7 @@
                     <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 "  href="{{ route('dashboard') }}">
+                                <a class="nav-link d-flex align-items-center gap-2 " href="{{ route('dashboard') }}">
                                     <svg class="bi">
                                         <use xlink:href="#house-fill" />
                                     </svg>
@@ -149,7 +149,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2 active"aria-current="page" href="{{ route('builder') }}">
+                                <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="{{ route('builder') }}">
                                     <svg class="bi">
                                         <use xlink:href="#puzzle" />
                                     </svg>
@@ -204,8 +204,8 @@
                         <div class="mb-3">
                             <label class="form-label">Options</label>
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="options[]" value="option1" id="option1">
-                                <label class="form-check-label" for="option1">Option 1</label>
+                                <input type="checkbox" class="form-check-input" name="options[]" value="MELT_SELECT" id="meltFile">
+                                <label class="form-check-label" for="meltFile">Melt File</label>
                             </div>
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" name="options[]" value="option2" id="option2">

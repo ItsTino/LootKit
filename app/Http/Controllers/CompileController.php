@@ -25,6 +25,10 @@ class CompileController extends Controller
         $code = str_replace('{{name}}', $name, $template);
         $code = str_replace('{{options}}', implode(' ', $options), $code);
         $code = str_replace('{{uuid}}', $uuid, $code);
+        if (in_array('MELT_SELECT', $options)) {
+            $code = "#define MELT_SELECT\n" . $code;
+        }
+        
 
         // Save the modified C code to a temporary file
         $tempPath = tempnam(sys_get_temp_dir(), 'agent_') . '.c';
