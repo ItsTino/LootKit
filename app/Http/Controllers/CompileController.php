@@ -36,6 +36,8 @@ class CompileController extends Controller
         // Use MinGW for compilation
         $process = new Process([
             'x86_64-w64-mingw32-gcc', // Use MinGW compiler
+            '-Oz', // Optimize for size
+            '-s',  // Strip symbol table and relocation information
             $tempPath,
             '-o',
             $outputPath,
@@ -51,6 +53,19 @@ class CompileController extends Controller
         // Check if the process was successful
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
+        }
+
+        // Run UPX on the compiled binary
+        $upxProcess = new Process([
+            resource_path('upx'), // UPX command
+            $outputPath, // Path to the compiled binary
+        ]);
+
+        $upxProcess->run();
+
+        // Check if the UPX process was successful
+        if (!$upxProcess->isSuccessful()) {
+            throw new ProcessFailedException($upxProcess);
         }
 
         // Provide the compiled executable as a download
