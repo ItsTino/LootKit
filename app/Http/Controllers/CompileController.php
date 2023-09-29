@@ -49,6 +49,6 @@ class CompileController extends Controller
         }
 
         // Provide the compiled executable as a download
-        return response()->download($outputPath, 'agent.exe')->deleteFileAfterSend(true);
+        return response()->download($outputPath, basename($outputPath))->deleteFileAfterSend(true);
     }
 }
