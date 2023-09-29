@@ -15,7 +15,11 @@ use App\Http\Controllers\LoginController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (session('authenticated')) {
+        return redirect('/dashboard');
+    }
+
+    return redirect('/login');
 });
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
@@ -23,4 +27,5 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::middleware(['authenticated'])->group(function () {
     // Protected Routes Here
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
