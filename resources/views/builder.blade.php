@@ -208,8 +208,8 @@
                                 <label class="form-check-label" for="meltFile">Melt File</label>
                             </div>
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="options[]" value="option2" id="option2">
-                                <label class="form-check-label" for="option2">Option 2</label>
+                                <input type="checkbox" class="form-check-input" name="options[]" value="STARTUP_SELECT" id="addToStartup">
+                                <label class="form-check-label" for="addToStartup">Add to Startup</label>
                             </div>
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" name="options[]" value="option3" id="option3">

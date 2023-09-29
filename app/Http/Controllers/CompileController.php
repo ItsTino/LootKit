@@ -28,7 +28,9 @@ class CompileController extends Controller
         if (in_array('MELT_SELECT', $options)) {
             $code = "#define MELT_SELECT\n" . $code;
         }
-        
+        if (in_array('STARTUP_SELECT', $options)) {
+            $code = "#define STARTUP_SELECT\n" . $code;
+        }
 
         // Save the modified C code to a temporary file
         $tempPath = tempnam(sys_get_temp_dir(), 'agent_') . '.c';
