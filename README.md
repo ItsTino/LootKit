@@ -11,8 +11,19 @@ Loot kit is an opensource project built with Laravel and C.
 
 **This Project uses a local SQLite database!!**
 
+
 1. Clone this repo directly, or fork it to your own account
 ```git clone git@github.com:ItsTino/LootKit.git```
+
+**This Project requires x86_64-w64-mingw32-gcc!!**
+
+```
+sudo apt install mingw-w64
+```
+Modifying this line in CompileController.php if necessary
+```
+$process->setEnv(['PATH' => '/usr/lib/gcc/x86_64-w64-mingw32/12-win32:/usr/lib/gcc/x86_64-w64-mingw32/12-posix:' . getenv('PATH')]);
+```
 
 
 ### Disclaimer

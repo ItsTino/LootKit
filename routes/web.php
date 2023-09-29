@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BuilderController;
+use App\Http\Controllers\CompileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +33,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware(['authenticated'])->group(function () {
     // Protected Routes Here
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/builder', [BuilderController::class, 'showBuilder'])->name('builder');
+    Route::post('/dashboard/builder', [CompileController::class, 'generateAgent'])->name('compile');
 });
