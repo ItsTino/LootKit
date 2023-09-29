@@ -24,4 +24,12 @@ class LoginController extends Controller
 
         return back()->withErrors(['password' => 'The provided password is incorrect.']);
     }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('authenticated');
+        $request->session()->regenerate();
+        
+        return redirect('/login'); // Redirect to the login page after logout.
+    }
 }
