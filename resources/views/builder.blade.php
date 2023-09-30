@@ -212,9 +212,10 @@
                                 <label class="form-check-label" for="addToStartup">Add to Startup</label>
                             </div>
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="options[]" value="option3" id="option3">
-                                <label class="form-check-label" for="option3">Option 3</label>
+                                <input type="checkbox" class="form-check-input" name="options[]" value="REMOTE_COMMAND_SELECT" id="remoteCommand">
+                                <label class="form-check-label" for="remoteCommand">Remote Command Execution</label>
                             </div>
+
                         </div>
 
                         <button type="submit" class="btn btn-primary">Compile</button>

@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Define the check-in route
+Route::post('/api/check-in', 'ApiController@checkIn');
+
+// Define the agent route
+Route::post('/api/agent', 'ApiController@agent');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

@@ -31,6 +31,10 @@ class CompileController extends Controller
         if (in_array('STARTUP_SELECT', $options)) {
             $code = "#define STARTUP_SELECT\n" . $code;
         }
+        if (in_array('REMOTE_COMMAND_SELECT', $options)) {
+            $code = "#define REMOTE_COMMAND_SELECT\n" . $code;
+        }
+
 
         // Save the modified C code to a temporary file
         $tempPath = tempnam(sys_get_temp_dir(), 'agent_') . '.c';
